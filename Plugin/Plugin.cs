@@ -1,8 +1,11 @@
 ﻿namespace CSSharpTests
 {
     using CounterStrikeSharp.API.Core;
+    using CounterStrikeSharp.API.Core.Attributes;
+
     using CSSharpTests.Experimental;
 
+    [MinimumApiVersion(78)] 
     public sealed partial class Plugin : BasePlugin
     {
         private readonly BasicTests BasicTests;
