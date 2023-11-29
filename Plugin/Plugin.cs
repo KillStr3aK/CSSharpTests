@@ -5,6 +5,8 @@
 
     using CSSharpTests.Experimental;
 
+    using Microsoft.Extensions.Logging;
+
     [MinimumApiVersion(84)]
     public sealed partial class Plugin : BasePlugin
     {
