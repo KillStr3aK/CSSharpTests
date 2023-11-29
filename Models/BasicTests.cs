@@ -18,7 +18,7 @@
 
         public void Initialize(bool hotReload)
         {
-            this.Logger.LogInformation(message: "Initializing '{0}'", this.GetType().Name);
+            this.Logger.LogInformation("Initializing '{0}'", this.GetType().Name);
         }
 
         public void Release(bool hotReload)
