@@ -25,7 +25,7 @@
 
         public void Initialize(bool hotReload)
         {
-            Logger.LogInformation(message: "Initializing '{0}'", this.GetType().Name);
+            Logger.LogInformation("Initializing '{0}'", this.GetType().Name);
 
             Plugin plugin = (this.PluginContext.Plugin as Plugin)!;
 
