@@ -3,45 +3,52 @@
     using CounterStrikeSharp.API;
     using CounterStrikeSharp.API.Modules.Memory;
 
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
-    // it'd be good if we could get the size of any schema class by a native
-    class NativeClass<T> : IDisposable
+    unsafe class NativeClass<T> : IDisposable
         where T : NativeObject
     {
         private T UnmanagedInstance;
 
         private nint UnmanagedPtr;
 
-        private bool Disposed = false;
-
         public ref T Value => ref this.UnmanagedInstance;
 
-        /*
-        public NativeClass() : this(Schema.GetClassSize(typeof(T)))
+        private bool disposed = false;
+
+        public NativeClass() : this(Schema.GetClassSize(typeof(T).Name))
             { }
-        */
 
         public NativeClass(int size)
         {
             this.UnmanagedPtr = Marshal.AllocHGlobal(size);
+            Unsafe.InitBlockUnaligned((void*)this.UnmanagedPtr, 0x0, (uint)size);
             this.UnmanagedInstance = (T)Activator.CreateInstance(typeof(T), this.UnmanagedPtr)!;
         }
 
         ~NativeClass()
         {
-            if (!this.Disposed)
-            {
-                this.Dispose();
-            }
+            this.Dispose(disposing: false);
         }
 
         public void Dispose()
         {
-            if (!this.Disposed)
+            this.Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
             {
-                Marshal.FreeHGlobal(this.UnmanagedPtr);
-                this.Disposed = true;
+                if (this.UnmanagedPtr != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(this.UnmanagedPtr);
+                    this.UnmanagedPtr = IntPtr.Zero;
+                }
+
+                this.disposed = true;
             }
         }
 
