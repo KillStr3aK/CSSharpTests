@@ -45,20 +45,10 @@
                     VirtualFunctions.CBaseEntity_TakeDamageOld(player.PlayerPawn.Value, damageInfo);
                 }
             });
-
-            VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Hook(OnTakeDamage, HookMode.Pre);
-        }
-
-        private HookResult OnTakeDamage(DynamicHook hook)
-        {
-            CTakeDamageInfo info = hook.GetParam<CTakeDamageInfo>(1);
-            this.Logger.LogInformation("{0} {1}", info.Attacker.Value.Handle, info.Inflictor.Value.Handle);
-            return HookResult.Continue;
         }
 
         public void Release(bool hotReload)
         {
-            VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Unhook(OnTakeDamage, HookMode.Pre);
             this.Logger.LogInformation("Releasing '{0}'", this.GetType().Name);
         }
     }
