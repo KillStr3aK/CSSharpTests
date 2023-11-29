@@ -26,7 +26,7 @@
         {
             if (config.Version < this.Config.Version)
             {
-                Logger.LogWarning("Configuration version mismatch (Expected: {0} | Current: {1})", this.Config.Version, config.Version);
+                base.Logger.LogWarning("Configuration version mismatch (Expected: {0} | Current: {1})", this.Config.Version, config.Version);
             }
 
             this.Config = config;
