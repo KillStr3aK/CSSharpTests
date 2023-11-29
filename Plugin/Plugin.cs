@@ -5,7 +5,7 @@
 
     using CSSharpTests.Experimental;
 
-    [MinimumApiVersion(78)]
+    [MinimumApiVersion(82)]
     public sealed partial class Plugin : BasePlugin
     {
         private readonly BasicTests BasicTests;
