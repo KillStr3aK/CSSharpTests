@@ -18,12 +18,12 @@
 
         public void Initialize(bool hotReload)
         {
-            Logger.LogInformation("Initializing '{0}'", this.GetType().Name);
+            this.Logger.LogInformation("Initializing '{0}'", this.GetType().Name);
         }
 
         public void Release(bool hotReload)
         {
-            Logger.LogInformation("Releasing '{0}'", this.GetType().Name);
+            this.Logger.LogInformation("Releasing '{0}'", this.GetType().Name);
         }
     }
 }

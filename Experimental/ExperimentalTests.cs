@@ -25,7 +25,7 @@
 
         public void Initialize(bool hotReload)
         {
-            Logger.LogInformation("Initializing '{0}'", this.GetType().Name);
+            this.Logger.LogInformation("Initializing '{0}'", this.GetType().Name);
 
             Plugin plugin = (this.PluginContext.Plugin as Plugin)!;
 
@@ -48,7 +48,7 @@
 
         public void Release(bool hotReload)
         {
-            Logger.LogInformation("Releasing '{0}'", this.GetType().Name);
+            this.Logger.LogInformation("Releasing '{0}'", this.GetType().Name);
         }
     }
 }
