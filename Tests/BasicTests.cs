@@ -3,6 +3,7 @@
     using CounterStrikeSharp.API;
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Plugin;
+    using CounterStrikeSharp.API.Modules.Commands;
 
     using Microsoft.Extensions.Logging;
 
@@ -24,7 +25,8 @@
 
             Plugin plugin = (this.PluginContext.Plugin as Plugin)!;
 
-            plugin.AddCommand("css_html", "Display html text", (player, info) =>
+            plugin.AddCommand("css_html", "Display html text",
+                [CommandHelper(1, "<html>", whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
             {
                 if (player == null || !player.IsValid)
                     return;
@@ -39,12 +41,11 @@
                 @event.FireEventToClient(player);
             });
 
-            plugin.RegisterEventHandler<EventPlayerJump>((EventPlayerJump @event, GameEventInfo info) =>
+            plugin.AddCommand(name: "css_chicken", "Spawns a chicken",
+                [CommandHelper(0, whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
             {
-                CCSPlayerController player = @event.Userid;
-
-                if (player is null || !player.IsValid || !player.PlayerPawn.IsValid)
-                    return HookResult.Continue;
+                if (player == null || !player.IsValid)
+                    return;
 
                 CChicken? chicken = Utilities.CreateEntityByName<CChicken>("chicken");
 
@@ -56,12 +57,10 @@
 
                     // random stuff after DispatchSpawn
                     if (chicken.CBodyComponent == null || chicken.CBodyComponent.SceneNode == null)
-                        return HookResult.Continue;
+                        return;
 
                     chicken.CBodyComponent.SceneNode.Scale = 5.0f;
                 }
-
-                return HookResult.Continue;
             });
         }
 
