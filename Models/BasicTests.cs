@@ -59,7 +59,6 @@
                         return HookResult.Continue;
 
                     chicken.CBodyComponent.SceneNode.Scale = 5.0f;
-                    chicken.CBodyComponent.SceneNode.GetSkeletonInstance().ModelState.MeshGroupMask = 2;
                 }
 
                 return HookResult.Continue;
