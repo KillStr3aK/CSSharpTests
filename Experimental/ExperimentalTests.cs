@@ -45,6 +45,27 @@
                     VirtualFunctions.CBaseEntity_TakeDamageOld(player.PlayerPawn.Value, damageInfo);
                 }
             });
+
+            // !ui "panorama/layout/base_mainmenu.vxml_c" care your ears
+            plugin.AddCommand("css_ui", "Display UI", (player, info) =>
+            {
+                if (player == null || !player.IsValid)
+                    return;
+
+                CPointClientUIWorldPanel? panel = Utilities.CreateEntityByName<CPointClientUIWorldPanel>("point_clientui_world_panel");
+
+                if (panel != null)
+                {
+                    panel.DialogXMLName = "s2r://" + info.GetArg(1);
+                    panel.Width = 320;
+                    panel.Health = 180;
+                    panel.DPI = 3;
+                    panel.Lit = false;
+
+                    panel.Teleport(player.AbsOrigin!, player.AbsRotation!, player.AbsVelocity);
+                    panel.DispatchSpawn();
+                }
+            });
         }
 
         public void Release(bool hotReload)
