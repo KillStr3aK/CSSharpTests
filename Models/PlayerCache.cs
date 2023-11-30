@@ -8,7 +8,7 @@
         {
             get
             {
-                if (base.TryGetValue(controller.UserId!.Value, out T? value))
+                if (base.TryGetValue(controller.Slot, out T? value))
                 {
                     return value;
                 }
@@ -16,17 +16,17 @@
                 return default(T)!;
             }
 
-            set { this[controller.UserId!.Value] = value; }
+            set { this[controller.Slot] = value; }
         }
 
         public bool ContainsPlayer(CCSPlayerController player)
         {
-            return base.ContainsKey(player.UserId!.Value);
+            return base.ContainsKey(player.Slot);
         }
 
         public bool RemovePlayer(CCSPlayerController player)
         {
-            return base.Remove(player.UserId!.Value);
+            return base.Remove(player.Slot);
         }
     }
 }
