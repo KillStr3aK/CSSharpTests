@@ -3,6 +3,7 @@
     using CounterStrikeSharp.API;
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Plugin;
+    using CounterStrikeSharp.API.Modules.Commands;
     using CounterStrikeSharp.API.Modules.Memory;
     using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
 
@@ -26,7 +27,8 @@
 
             Plugin plugin = (this.PluginContext.Plugin as Plugin)!;
 
-            plugin.AddCommand("css_damage", "Deal damage", (player, info) =>
+            plugin.AddCommand("css_damage", "Deal damage",
+                [CommandHelper(0, whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
             {
                 if (player == null || !player.IsValid || player.PlayerPawn.Value == null)
                     return;
@@ -47,7 +49,8 @@
             });
 
             // !ui "panorama/layout/base_mainmenu.vxml_c" care your ears
-            plugin.AddCommand("css_ui", "Display UI", (player, info) =>
+            plugin.AddCommand("css_ui", "Display UI",
+                [CommandHelper(1, "<dialog>", CommandUsage.CLIENT_ONLY)] (player, info) =>
             {
                 if (player == null || !player.IsValid)
                     return;
@@ -65,6 +68,17 @@
                     panel.Teleport(player.AbsOrigin!, player.AbsRotation!, player.AbsVelocity);
                     panel.DispatchSpawn();
                 }
+            });
+
+            // name is automatically updated in the chat, but not in the scoreboard (it requires a change in the score or any network update) currently.
+            plugin.AddCommand("css_rename", "Rename player", 
+                [CommandHelper(1, "<name>", CommandUsage.CLIENT_ONLY)] (player, info) =>
+            {
+                if (player == null || !player.IsValid)
+                    return;
+
+                SchemaString<CBasePlayerController> playerName = new SchemaString<CBasePlayerController>(player, "m_iszPlayerName");
+                playerName.Set(info.ArgByIndex(1));
             });
         }
 
