@@ -12,9 +12,9 @@
     {
         public required PluginConfig Config { get; set; } = new PluginConfig();
 
-        private readonly BasicTests BasicTests;
+        private readonly IBaseTest BasicTests;
 
-        private readonly ExperimentalTests ExperimentalTests;
+        private readonly IBaseTest ExperimentalTests;
 
         public Plugin(BasicTests basicTests, ExperimentalTests experimentalTests)
         {
