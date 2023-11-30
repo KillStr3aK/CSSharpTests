@@ -5,9 +5,9 @@
     using CounterStrikeSharp.API;
     using CounterStrikeSharp.API.Modules.Memory;
 
-    public unsafe class ESchema
+    public unsafe static class ESchema
     {
-        public unsafe T[] GetFixedArray<T>(nint pointer, string @class, string member, int length) where T : NativeObject
+        public static unsafe T[] GetFixedArray<T>(nint pointer, string @class, string member, int length)
         {
             nint ptr = pointer + Schema.GetSchemaOffset(@class, member);
             Span<nint> references = MemoryMarshal.CreateSpan<nint>(ref ptr, length);
@@ -15,6 +15,7 @@
 
             for (int i = 0; i < length; i++)
             {
+                Console.WriteLine(references[i]);
                 values[i] = (T)Activator.CreateInstance(typeof(T), references[i])!;
             }
 
