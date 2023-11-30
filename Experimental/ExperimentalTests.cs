@@ -80,6 +80,26 @@
                 SchemaString<CBasePlayerController> playerName = new SchemaString<CBasePlayerController>(player, "m_iszPlayerName");
                 playerName.Set(info.ArgByIndex(1));
             });
+
+            plugin.AddCommand("css_vm", "Rename player",
+                [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
+            {
+                if (player == null || !player.IsValid)
+                    return;
+
+                CHandle<CBaseViewModel> viewModel = GetPlayerViewModels(player)[0];
+
+                if (viewModel.IsValid && viewModel.Value != null)
+                {
+                    this.Logger.LogInformation("{0}", viewModel.Value.VMName);
+                }
+            });
+        }
+
+        private unsafe CHandle<CBaseViewModel>[] GetPlayerViewModels(CCSPlayerController player)
+        {
+            CCSPlayer_ViewModelServices viewModelServices = new CCSPlayer_ViewModelServices(player.PlayerPawn.Value.ViewModelServices!.Handle);
+            return ESchema.GetFixedArray<CHandle<CBaseViewModel>>(viewModelServices.Handle, "CCSPlayer_ViewModelServices", "m_hViewModel", 3);
         }
 
         public void Release(bool hotReload)
