@@ -6,7 +6,7 @@
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
-    unsafe class NativeClass<T> : IDisposable
+    public unsafe class NativeClass<T> : IDisposable
         where T : NativeObject
     {
         private T UnmanagedInstance;
