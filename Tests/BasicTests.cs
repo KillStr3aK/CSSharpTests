@@ -41,7 +41,7 @@
                 @event.FireEventToClient(player);
             });
 
-            plugin.AddCommand("css_respawn", "Respawn player",
+            plugin.AddCommand("css_r", "Respawn player",
                 [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
                 {
                     if (player == null || !player.IsValid)
