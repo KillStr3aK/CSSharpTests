@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <Using Include="Microsoft.Extensions.Logging;" />
+    <Using Include="System.Runtime.CompilerServices" />
+    <Using Include="System.Runtime.InteropServices" />
   </ItemGroup>
 
 </Project>
