@@ -2,10 +2,6 @@
 {
     using CounterStrikeSharp.API;
 
-    using System;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
-
     public unsafe class CEconItemDefinition : NativeObject
     {
         [StructLayout(LayoutKind.Explicit)]
