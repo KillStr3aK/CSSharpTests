@@ -4,12 +4,19 @@
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Plugin;
     using CounterStrikeSharp.API.Modules.Commands;
+    using CounterStrikeSharp.API.Modules.Entities.Constants;
 
     public class BasicTests : IBaseTest
     {
         private readonly ILogger<BasicTests> Logger;
 
         private readonly PluginContext PluginContext;
+
+        // CCSGameRules does not derive from CEntityInstance
+        private readonly CEntityCache<CCSGameRulesProxy> GameRulesProxy = new CEntityCache<CCSGameRulesProxy>(() =>
+        {
+            return Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").First();
+        });
 
         public BasicTests(ILogger<BasicTests> logger, PluginContext pluginContext)
         {
@@ -82,6 +89,32 @@
                         return;
 
                     chicken.CBodyComponent.SceneNode.Scale = 5.0f;
+                }
+            });
+
+            plugin.AddCommand("css_endround", "Terminate round with a reason",
+                [CommandHelper(2, "<delay> <reason>", whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
+            {
+                if (player == null || !player.IsValid)
+                    return;
+
+                if (!float.TryParse(info.GetArg(1), out float delay))
+                {
+                    info.ReplyToCommand("Invalid argument");
+                    return;
+                }
+
+                if (!int.TryParse(info.GetArg(2), out int roundEndReason))
+                {
+                    info.ReplyToCommand("Invalid argument");
+                    return;
+                }
+
+                CCSGameRules? gameRules = this.GameRulesProxy.Value?.GameRules;
+
+                if (gameRules != null)
+                {
+                    gameRules.TerminateRound(delay, (RoundEndReason)roundEndReason);
                 }
             });
         }
