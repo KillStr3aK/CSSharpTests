@@ -43,12 +43,27 @@
 
             plugin.AddCommand("css_r", "Respawn player",
                 [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
-                {
-                    if (player == null || !player.IsValid)
-                        return;
+            {
+                if (player == null || !player.IsValid)
+                    return;
 
-                    player.Respawn();
-                });
+                player.Respawn();
+            });
+
+            plugin.AddCommand("css_model", "Respawn player",
+                [CommandHelper(1, "<model>", whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
+            {
+                if (player == null || !player.IsValid)
+                    return;
+
+                if (player.Pawn == null || !player.Pawn.IsValid)
+                    return;
+
+                if (player.Pawn.Value == null || !player.Pawn.Value.IsValid)
+                    return;
+
+                player.Pawn.Value.SetModel(info.GetArg(1));
+            });
 
             plugin.AddCommand(name: "css_chicken", "Spawns a big ass chicken",
                 [CommandHelper(0, whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
