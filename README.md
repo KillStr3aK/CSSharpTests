@@ -1,5 +1,5 @@
 # CSSharpTests
-This plugin servers as a playground for trying out (new/experimental) things.
+This plugin serves as a playground for trying out (new/experimental) things.
 
 Also it might come handy for people to see how could they achieve/implement such things.
 
