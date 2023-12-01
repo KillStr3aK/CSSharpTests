@@ -18,5 +18,10 @@
 
             return ptr;
         }
+
+        public static string ToHexStr(this IntPtr ptr)
+        {
+            return $"0x{ptr:X}";
+        }
     }
 }

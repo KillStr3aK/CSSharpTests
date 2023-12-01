@@ -156,7 +156,7 @@
                     return;
                 } else
                 {
-                    this.Logger.LogInformation("CSkeletonInstance is: {0}", $"0x{skeletonInstance.Handle:X}");
+                    this.Logger.LogInformation("CSkeletonInstance is: {0}", $"{skeletonInstance.Handle.ToHexStr()}");
                 }
 
                 // changing player size
@@ -174,7 +174,7 @@
             if (this.EconItemSchema == null)
             {
                 this.EconItemSchema = new CEconItemSchema(instancePtr);
-                this.Logger.LogInformation("Captured {CEconItemSchema}: {1}", "CEconItemSchema", $"0x{instancePtr:X}");
+                this.Logger.LogInformation("Captured {CEconItemSchema}: {1}", "CEconItemSchema", instancePtr.ToHexStr());
             }
 
             return HookResult.Continue;
