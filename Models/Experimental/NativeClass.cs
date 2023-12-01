@@ -6,25 +6,25 @@
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
-    public unsafe class NativeClass<T> : IDisposable
-        where T : NativeObject
+    public unsafe class NativeClass<SchemaClass> : IDisposable
+        where SchemaClass : NativeObject
     {
-        private T UnmanagedInstance;
+        private SchemaClass UnmanagedInstance;
 
         private nint UnmanagedPtr;
 
-        public ref T Value => ref this.UnmanagedInstance;
+        public ref SchemaClass Value => ref this.UnmanagedInstance;
 
         private bool disposed = false;
 
-        public NativeClass() : this(Schema.GetClassSize(typeof(T).Name))
+        public NativeClass() : this(Schema.GetClassSize(typeof(SchemaClass).Name))
             { }
 
         public NativeClass(int size)
         {
             this.UnmanagedPtr = Marshal.AllocHGlobal(size);
             Unsafe.InitBlockUnaligned((void*)this.UnmanagedPtr, 0x0, (uint)size);
-            this.UnmanagedInstance = (T)Activator.CreateInstance(typeof(T), this.UnmanagedPtr)!;
+            this.UnmanagedInstance = (SchemaClass)Activator.CreateInstance(typeof(SchemaClass), this.UnmanagedPtr)!;
         }
 
         ~NativeClass()
@@ -52,8 +52,8 @@
             }
         }
 
-        public static implicit operator T(NativeClass<T> nc) => nc.UnmanagedInstance;
+        public static implicit operator SchemaClass(NativeClass<SchemaClass> nc) => nc.UnmanagedInstance;
 
-        public static implicit operator nint(NativeClass<T> nc) => nc.UnmanagedInstance.Handle;
+        public static implicit operator nint(NativeClass<SchemaClass> nc) => nc.UnmanagedInstance.Handle;
     }
 }
