@@ -41,6 +41,15 @@
                 @event.FireEventToClient(player);
             });
 
+            plugin.AddCommand("css_respawn", "Respawn player",
+                [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
+                {
+                    if (player == null || !player.IsValid)
+                        return;
+
+                    player.Respawn();
+                });
+
             plugin.AddCommand(name: "css_chicken", "Spawns a big ass chicken",
                 [CommandHelper(0, whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
             {
