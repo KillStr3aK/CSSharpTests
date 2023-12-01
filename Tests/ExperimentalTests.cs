@@ -5,15 +5,21 @@
     using CounterStrikeSharp.API.Core.Plugin;
     using CounterStrikeSharp.API.Modules.Commands;
     using CounterStrikeSharp.API.Modules.Memory;
+    using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
     using CounterStrikeSharp.API.Modules.Utils;
 
     using Microsoft.Extensions.Logging;
 
-    public class ExperimentalTests : IBaseTest
+    public unsafe class ExperimentalTests : IBaseTest
     {
         private readonly ILogger<ExperimentalTests> Logger;
 
         private readonly PluginContext PluginContext;
+
+        public required MemoryFunctionWithReturn<nint, string, nint> CEconItemSchema_GetAttributeDefinitionByName;
+
+        // this is null on hotreload unless something triggers the capturing function so imma mark it nullable
+        public required CEconItemSchema? EconItemSchema;
 
         public ExperimentalTests(ILogger<ExperimentalTests> logger, PluginContext pluginContext)
         {
@@ -105,6 +111,73 @@
                     this.Logger.LogInformation("{0}", viewModel.Value.VMName);
                 }
             });
+
+            plugin.AddCommand("css_econ", "Get econ item system pointer",
+                [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
+            {
+                if (player == null || !player.IsValid)
+                    return;
+
+                CEconItemSystem econItemSystem = new CEconItemSystem(NativeAPI.GetEconItemSystem()); // segfault
+                CEconItemSchema econItemSchema = econItemSystem.GetEconItemSchema();
+
+                this.Logger.LogInformation("{0} {1}", econItemSystem.Handle, econItemSchema.Handle);
+            });
+
+            // this currently only applies on the next spawn as we have no networkstatechanged implemented yet
+            plugin.AddCommand("css_resize", "Resize player",
+                [CommandHelper(1, "<size>", whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
+            {
+                if (player == null || !player.IsValid)
+                    return;
+
+                if (player.Pawn == null || !player.Pawn.IsValid)
+                    return;
+
+                if (player.Pawn.Value == null || !player.Pawn.Value.IsValid)
+                    return;
+
+                if (player.Pawn.Value.CBodyComponent == null || player.Pawn.Value.CBodyComponent.SceneNode == null)
+                    return;
+
+                if (!float.TryParse(info.GetArg(1), out float result))
+                {
+                    info.ReplyToCommand("Invalid argument");
+                    return;
+                }
+
+                // this is totally unneeded haha, we have SceneNode.GetSkeletonInstance() already, just testing the vfunc wrapper class
+                VirtualFunctionWithReturn<nint, nint> getSkeletonInstance = new VirtualFunctionWithReturn<nint, nint>(player.Pawn.Value.CBodyComponent.SceneNode.Handle, GameData.GetOffset("CGameSceneNode_GetSkeletonInstance"));
+                CSkeletonInstance skeletonInstance = new CSkeletonInstance(getSkeletonInstance.Invoke(player.Pawn.Value.CBodyComponent.SceneNode.Handle));
+
+                if (skeletonInstance == null)
+                {
+                    this.Logger.LogInformation("CSkeletonInstance is null");
+                    return;
+                } else
+                {
+                    this.Logger.LogInformation("CSkeletonInstance is: {0}", $"0x{skeletonInstance.Handle:X}");
+                }
+
+                // changing player size
+                skeletonInstance.Scale = result;
+            });
+
+            this.CEconItemSchema_GetAttributeDefinitionByName = new(plugin.Config.GetAttributeDefinitionByNameSignature.Get());
+            this.CEconItemSchema_GetAttributeDefinitionByName.Hook(GetAttributeDefinitionByNamePre, HookMode.Pre);
+        }
+
+        private HookResult GetAttributeDefinitionByNamePre(DynamicHook h)
+        {
+            nint instancePtr = h.GetParam<nint>(0);
+
+            if (this.EconItemSchema == null)
+            {
+                this.EconItemSchema = new CEconItemSchema(instancePtr);
+                this.Logger.LogInformation("Captured {CEconItemSchema}: {1}", "CEconItemSchema", $"0x{instancePtr:X}");
+            }
+
+            return HookResult.Continue;
         }
 
         // assume that the player has a valid pawn
@@ -122,6 +195,7 @@
         public void Release(bool hotReload)
         {
             this.Logger.LogInformation("Releasing '{0}'", this.GetType().Name);
+            this.CEconItemSchema_GetAttributeDefinitionByName.Unhook(GetAttributeDefinitionByNamePre, HookMode.Pre);
         }
     }
 }
