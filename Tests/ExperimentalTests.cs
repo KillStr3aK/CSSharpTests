@@ -93,20 +93,29 @@
                 if (player.Pawn.Value == null || !player.Pawn.Value.IsValid)
                     return;
 
-                CHandle<CBaseViewModel> viewModel = GetPlayerViewModels(player)[0];
+                CHandle<CBaseViewModel>[]? viewModels = GetPlayerViewModels(player);
 
-                if (viewModel.IsValid && viewModel.Value != null)
+                if (viewModels == null)
+                    return;
+
+                CHandle<CBaseViewModel>? viewModel = viewModels[0];
+
+                if (viewModel != null && viewModel.IsValid && viewModel.Value != null && viewModel.IsValid)
                 {
                     this.Logger.LogInformation("{0}", viewModel.Value.VMName);
                 }
             });
         }
 
-        private unsafe CHandle<CBaseViewModel>[] GetPlayerViewModels(CCSPlayerController player)
+        // assume that the player has a valid pawn
+        private unsafe CHandle<CBaseViewModel>[]? GetPlayerViewModels(CCSPlayerController player)
         {
             CCSPlayerPawn pawn = player.Pawn.Value!.As<CCSPlayerPawn>();
 
-            CCSPlayer_ViewModelServices viewModelServices = new CCSPlayer_ViewModelServices(pawn.ViewModelServices!.Handle);
+            if (pawn.ViewModelServices == null || pawn.ViewModelServices.Handle == IntPtr.Zero)
+                return null;
+
+            CCSPlayer_ViewModelServices viewModelServices = new CCSPlayer_ViewModelServices(pawn.ViewModelServices.Handle);
             return ESchema.GetFixedArray<CHandle<CBaseViewModel>>(viewModelServices.Handle, "CCSPlayer_ViewModelServices", "m_hViewModel", 3);
         }
 
