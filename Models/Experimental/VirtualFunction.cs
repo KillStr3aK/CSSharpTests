@@ -2,6 +2,8 @@
 {
     using CounterStrikeSharp.API.Modules.Memory;
 
+    // will be deleted when https://github.com/roflmuffin/CounterStrikeSharp/pull/157 is merged
+
     public partial class VirtualFunctionVoid
     {
         private Action Function;
