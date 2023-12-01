@@ -5,8 +5,6 @@
     using CounterStrikeSharp.API.Core.Plugin;
     using CounterStrikeSharp.API.Modules.Commands;
 
-    using Microsoft.Extensions.Logging;
-
     public class BasicTests : IBaseTest
     {
         private readonly ILogger<BasicTests> Logger;

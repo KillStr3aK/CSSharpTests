@@ -8,8 +8,6 @@
     using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
     using CounterStrikeSharp.API.Modules.Utils;
 
-    using Microsoft.Extensions.Logging;
-
     public unsafe class ExperimentalTests : IBaseTest
     {
         private readonly ILogger<ExperimentalTests> Logger;
