@@ -150,11 +150,11 @@
 
                 if (skeletonInstance == null)
                 {
-                    this.Logger.LogInformation("CSkeletonInstance is null");
+                    this.Logger.LogInformation("{CSkeletonInstance} is null", "CSkeletonInstance");
                     return;
                 } else
                 {
-                    this.Logger.LogInformation("CSkeletonInstance is: {0}", $"{skeletonInstance.Handle.ToHexStr()}");
+                    this.Logger.LogInformation("{CSkeletonInstance} is: {0}", "CSkeletonInstance", $"{skeletonInstance.Handle.ToHexStr()}");
                 }
 
                 // changing player size
