@@ -87,6 +87,12 @@
                 if (player == null || !player.IsValid)
                     return;
 
+                if (player.Pawn == null || !player.Pawn.IsValid)
+                    return;
+
+                if (player.Pawn.Value == null || !player.Pawn.Value.IsValid)
+                    return;
+
                 CHandle<CBaseViewModel> viewModel = GetPlayerViewModels(player)[0];
 
                 if (viewModel.IsValid && viewModel.Value != null)
@@ -98,7 +104,9 @@
 
         private unsafe CHandle<CBaseViewModel>[] GetPlayerViewModels(CCSPlayerController player)
         {
-            CCSPlayer_ViewModelServices viewModelServices = new CCSPlayer_ViewModelServices(player.PlayerPawn.Value.ViewModelServices!.Handle);
+            CCSPlayerPawn pawn = player.Pawn.Value!.As<CCSPlayerPawn>();
+
+            CCSPlayer_ViewModelServices viewModelServices = new CCSPlayer_ViewModelServices(pawn.ViewModelServices!.Handle);
             return ESchema.GetFixedArray<CHandle<CBaseViewModel>>(viewModelServices.Handle, "CCSPlayer_ViewModelServices", "m_hViewModel", 3);
         }
 
