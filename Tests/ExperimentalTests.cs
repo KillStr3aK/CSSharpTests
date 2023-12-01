@@ -30,7 +30,7 @@
             plugin.AddCommand("css_damage", "Deal damage",
                 [CommandHelper(0, whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
             {
-                if (player == null || !player.IsValid || player.PlayerPawn.Value == null)
+                if (player == null || !player.IsValid || player.Pawn.Value == null)
                     return;
 
                 CWorld? world = Utilities.FindAllEntitiesByDesignerName<CWorld>("world").FirstOrDefault();
@@ -44,7 +44,7 @@
                     damageInfo.Value.Damage = 50.0f;
                     damageInfo.Value.BitsDamageType = (int)DamageTypes_t.DMG_FALL;
                     damageInfo.Value.Inflictor.Raw = world.EntityHandle.Raw;
-                    VirtualFunctions.CBaseEntity_TakeDamageOld(player.PlayerPawn.Value, damageInfo);
+                    VirtualFunctions.CBaseEntity_TakeDamageOld(player.Pawn.Value, damageInfo);
                 }
             });
 
