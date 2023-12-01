@@ -1,7 +1,5 @@
 ﻿namespace CSSharpTests.Experimental
 {
-    using System.Runtime.InteropServices;
-
     using CounterStrikeSharp.API;
     using CounterStrikeSharp.API.Modules.Memory;
 
