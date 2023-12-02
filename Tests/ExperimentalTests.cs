@@ -16,6 +16,8 @@
 
         public required MemoryFunctionWithReturn<nint, string, nint> CEconItemSchema_GetAttributeDefinitionByName;
 
+        private MemoryFunctionVoid<nint, long, string, nint, long, nint, long> sub_D9E730 = new("\\x48\\x85\\xFF\\x74\\x0B\\xE9\\xA6\\xFE\\xFF\\xFF");
+
         // this is null on hotreload unless something triggers the capturing function so imma mark it nullable
         public required CEconItemSchema? EconItemSchema;
 
@@ -162,7 +164,9 @@
             });
 
             this.CEconItemSchema_GetAttributeDefinitionByName = new(plugin.Config.GetAttributeDefinitionByNameSignature.Get());
-            this.CEconItemSchema_GetAttributeDefinitionByName.Hook(GetAttributeDefinitionByNamePre, HookMode.Pre);
+            this.CEconItemSchema_GetAttributeDefinitionByName.Hook(this.GetAttributeDefinitionByNamePre, HookMode.Pre);
+
+            this.sub_D9E730.Hook(this.sub_D9E730Pre, HookMode.Pre);
         }
 
         private HookResult GetAttributeDefinitionByNamePre(DynamicHook h)
@@ -174,6 +178,14 @@
                 this.EconItemSchema = new CEconItemSchema(instancePtr);
                 this.Logger.LogInformation("Captured {CEconItemSchema}: {1}", "CEconItemSchema", instancePtr.ToHexStr());
             }
+
+            return HookResult.Continue;
+        }
+
+        private HookResult sub_D9E730Pre(DynamicHook h)
+        {
+            string text = h.GetParam<string>(2);
+            this.Logger.LogInformation("{0}", text);
 
             return HookResult.Continue;
         }
@@ -193,7 +205,8 @@
         public void Release(bool hotReload)
         {
             this.Logger.LogInformation("Releasing '{0}'", this.GetType().Name);
-            this.CEconItemSchema_GetAttributeDefinitionByName.Unhook(GetAttributeDefinitionByNamePre, HookMode.Pre);
+            this.CEconItemSchema_GetAttributeDefinitionByName.Unhook(this.GetAttributeDefinitionByNamePre, HookMode.Pre);
+            this.sub_D9E730.Unhook(this.sub_D9E730Pre, HookMode.Pre);
         }
     }
 }
