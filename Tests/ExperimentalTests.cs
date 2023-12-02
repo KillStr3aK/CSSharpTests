@@ -159,7 +159,7 @@
                     this.Logger.LogInformation("{CSkeletonInstance} is: {0}", "CSkeletonInstance", $"{skeletonInstance.Handle.ToHexStr()}");
                 }
 
-                // changing player size
+                // changing player size (we dont need the skeleton instance to do this)
                 skeletonInstance.Scale = result;
             });
 
