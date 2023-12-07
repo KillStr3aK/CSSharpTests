@@ -73,7 +73,7 @@
             plugin.AddCommand(name: "css_chicken", "Spawns a big ass chicken",
                 [CommandHelper(0, whoCanExecute: CommandUsage.CLIENT_ONLY)] (player, info) =>
             {
-                if (player == null || !player.IsValid)
+                if (player == null || !player.IsValid || player.Pawn == null || !player.Pawn.IsValid)
                     return;
 
                 CChicken? chicken = Utilities.CreateEntityByName<CChicken>("chicken");
@@ -81,7 +81,7 @@
                 // maybe do more sanity checks?
                 if (chicken != null)
                 {
-                    chicken.Teleport(player.PlayerPawn.Value!.AbsOrigin!, player.PlayerPawn.Value.AbsRotation!, player.PlayerPawn.Value.AbsVelocity);
+                    chicken.Teleport(player.Pawn.Value!.AbsOrigin!, player.Pawn.Value.AbsRotation!, player.Pawn.Value.AbsVelocity);
                     chicken.DispatchSpawn();
 
                     // random stuff after DispatchSpawn
