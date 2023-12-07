@@ -13,7 +13,6 @@
 
             for (int i = 0; i < length; i++)
             {
-                Console.WriteLine(references[i]);
                 values[i] = (T)Activator.CreateInstance(typeof(T), references[i])!;
             }
 
