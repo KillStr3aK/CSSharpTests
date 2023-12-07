@@ -13,3 +13,6 @@ Also it might come handy for people to see how could they achieve/implement such
 
 > [!CAUTION]
 > Experimental stuff is very likely to break. They should not be added to your project as long as they are marked as experimental.
+
+> [!NOTE]
+> Every function signature that is being used in this project is uploaded to lumen in IDA (either by me, or by others)
