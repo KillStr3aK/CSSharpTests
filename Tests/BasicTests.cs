@@ -18,10 +18,10 @@
             return Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").First();
         });
 
-        public BasicTests(ILogger<BasicTests> logger, PluginContext pluginContext)
+        public BasicTests(ILogger<BasicTests> logger, IPluginContext pluginContext)
         {
             this.Logger = logger;
-            this.PluginContext = pluginContext;
+            this.PluginContext = (pluginContext as PluginContext)!;
         }
 
         public void Initialize(bool hotReload)

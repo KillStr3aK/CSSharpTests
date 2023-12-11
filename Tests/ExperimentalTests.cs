@@ -19,10 +19,10 @@
         // this is null on hotreload unless something triggers the capturing function so imma mark it nullable
         public required CEconItemSchema? EconItemSchema;
 
-        public ExperimentalTests(ILogger<ExperimentalTests> logger, PluginContext pluginContext)
+        public ExperimentalTests(ILogger<ExperimentalTests> logger, IPluginContext pluginContext)
         {
             this.Logger = logger;
-            this.PluginContext = pluginContext;
+            this.PluginContext = (pluginContext as PluginContext)!;
         }
 
         public void Initialize(bool hotReload)
