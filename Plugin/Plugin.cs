@@ -5,7 +5,7 @@
 
     using CSSharpTests.Experimental;
 
-    [MinimumApiVersion(84)]
+    [MinimumApiVersion(124)]
     public sealed partial class Plugin : BasePlugin, IPluginConfig<PluginConfig>
     {
         public required PluginConfig Config { get; set; } = new PluginConfig();
